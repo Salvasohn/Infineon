@@ -11,6 +11,6 @@ set(CMAKE_SIZE arm-none-eabi-size CACHE FILEPATH "")
 set(XMC_CPU_FLAGS "-mcpu=cortex-m4 -mthumb -mfpu=fpv4-sp-d16 -mfloat-abi=hard")
 
 set(CMAKE_C_FLAGS_INIT "${XMC_CPU_FLAGS} -ffunction-sections -fdata-sections")
-set(CMAKE_CXX_FLAGS_INIT "${XMC_CPU_FLAGS} -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-threadsafe-statics")
+set(CMAKE_CXX_FLAGS_INIT "${XMC_CPU_FLAGS} -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-threadsafe-statics -fno-use-cxa-atexit")
 set(CMAKE_ASM_FLAGS_INIT "${XMC_CPU_FLAGS} -x assembler-with-cpp")
 set(CMAKE_EXE_LINKER_FLAGS_INIT "${XMC_CPU_FLAGS}")

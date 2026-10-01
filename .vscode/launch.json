@@ -13,6 +13,7 @@
       "rtos": "FreeRTOS",
       "runToEntryPoint": "main",
       "preLaunchTask": "CMake: build debug",
+      "svdFile": "${workspaceFolder}/build/debug/_deps/xmclib-src/CMSIS/Infineon/SVD/XMC4500.svd",
       "serverArgs": ["-speed", "4000"],
       "rttConfig": {
         "enabled": true,
