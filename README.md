@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.09** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.10** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -16,6 +16,7 @@ Aktueller Entwicklungsstand: **00.00.09** auf Branch `develop`.
 
 - Arm GNU Toolchain (`arm-none-eabi-gcc/g++/gdb`), fuer CI auf `14.2.rel1` / GCC `14.2.1` gepinnt
 - CMake >= 3.24 und Ninja
+- clang-format und clang-tidy; die CI verwendet LLVM 18
 - Infineon XMCLib `release-v4.7.0` (Commit `c24888699c6c5cfd6e5475be90d9703e43540d04`)
 - Arm CMSIS `5.9.0` (Commit `2b7495b8535bdcb306dac29b9ded4cfb679d7e5c`) fuer die generischen Cortex-M4-Core-Header
 - FreeRTOS Kernel `V11.2.0` (Commit `0adc196d4bd52a2d91102b525b0aafc1e14a2386`), Port `GCC_ARM_CM4F`, Heap `heap_4`
@@ -35,9 +36,11 @@ arm-none-eabi-g++
 arm-none-eabi-gdb
 cmake
 ninja
+clang-format
+clang-tidy
 ```
 
-Zusaetzlich muss das aktuelle **SEGGER J-Link Software and Documentation Pack** installiert sein. Der J-Link Ultra+ wird per SWD mit dem Target verbunden; das Target muss separat bzw. passend zur Hardware versorgt sein.
+Fuer identische Code-Quality-Ergebnisse wie in der CI wird lokal LLVM/Clang 18 empfohlen. Zusaetzlich muss das aktuelle **SEGGER J-Link Software and Documentation Pack** installiert sein. Der J-Link Ultra+ wird per SWD mit dem Target verbunden; das Target muss separat bzw. passend zur Hardware versorgt sein.
 
 Die externen Quellen liegen als Git-Submodule unter `ThirdParty/`. Nach einem normalen Clone oder nach dem Wechsel auf diesen Stand einmal ausfuehren:
 
@@ -87,6 +90,23 @@ xmc4500_freertos_rtt.bin
 xmc4500_freertos_rtt.map
 ```
 
+## clang-format und clang-tidy
+
+Die Stilregeln liegen in `.clang-format`, die statischen Analyse-Regeln in `.clang-tidy`. Geprueft wird ausschliesslich eigener Code unter `src/` und `include/`; gepinnte Fremdquellen unter `ThirdParty/` werden nicht umformatiert oder als Projektcode bewertet.
+
+Nach einem Debug-Configure stehen folgende CMake-Ziele zur Verfuegung:
+
+```bash
+cmake --preset debug --fresh
+cmake --build --preset debug --target format
+cmake --build --preset debug --target format-check
+cmake --build --preset debug --target tidy
+```
+
+`format` schreibt die clang-format-Aenderungen in die Quelldateien. `format-check` prueft nur und liefert bei Abweichungen einen Fehler. `tidy` verwendet `build/debug/compile_commands.json`, erkennt den Pfad von `arm-none-eabi-g++` und uebergibt dessen Toolchain-Root zusammen mit `--target=arm-none-eabi` an clang-tidy. Damit wird der Code als Cortex-M-Bare-Metal-Code und nicht als Host-Anwendung analysiert.
+
+In VS Code stehen dieselben Funktionen als Tasks `Code quality: format`, `Code quality: format check` und `Code quality: clang-tidy` zur Verfuegung.
+
 ## Continuous Integration
 
 Der Workflow `.github/workflows/build.yml` laeuft bei jedem Push auf `develop`, bei Pull Requests gegen `develop` und manuell per `workflow_dispatch`.
@@ -95,16 +115,14 @@ Die CI verwendet bewusst dieselbe Compiler-Version wie die lokale Referenzumgebu
 
 Die Pipeline:
 
-1. checkt das Repository inklusive aller Git-Submodule aus,
-2. installiert Ninja und die gepinnte Arm GNU Toolchain 14.2.rel1,
-3. prueft explizit, dass `arm-none-eabi-g++` Version `14.2.1` meldet,
-4. konfiguriert Debug und Release jeweils mit `--fresh`,
-5. baut beide CMake-Presets,
-6. prueft, dass ELF/HEX/BIN/MAP vorhanden und nicht leer sind,
-7. fuehrt `arm-none-eabi-size` auf dem ELF aus,
-8. laedt die Firmware-Dateien fuer Debug und Release als GitHub-Actions-Artefakte hoch.
+1. baut Debug und Release in getrennten Jobs mit der gepinnten Arm GNU Toolchain,
+2. prueft fuer beide Builds ELF/HEX/BIN/MAP und fuehrt `arm-none-eabi-size` aus,
+3. laedt die Firmware-Dateien fuer Debug und Release als GitHub-Actions-Artefakte hoch,
+4. startet zusaetzlich einen Code-Quality-Job mit clang-format 18 und clang-tidy 18,
+5. erzeugt dort eine frische Debug-Compile-Database,
+6. fuehrt `format-check` und anschliessend `tidy` gegen den eigenen Projektcode aus.
 
-Damit kann ein Build ohne angeschlossene Hardware serverseitig verifiziert werden. Flashen, SWD und RTT bleiben Hardware-Tests und koennen nicht durch die CI ersetzt werden.
+Damit koennen Build, Formatierung und ein definierter Satz statischer Analysen ohne angeschlossene Hardware serverseitig verifiziert werden. Flashen, SWD und RTT bleiben Hardware-Tests und koennen nicht durch die CI ersetzt werden.
 
 ## Debuggen mit VS Code und J-Link Ultra+
 
@@ -123,7 +141,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.09
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.10
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat
@@ -136,9 +154,11 @@ Der konkrete `SystemCoreClock`-Wert wird zur Laufzeit ausgegeben. Die Heartbeat-
 ## Projektstruktur
 
 ```text
-.github/workflows/         CI-Build und automatische Versions-Tag-Pruefung
-.vscode/                  VS-Code Build/Debug-Konfiguration
-cmake/                    Toolchain und lokale Dependency-Einbindung
+.github/workflows/         CI-Build, Code-Quality und automatische Versions-Tag-Pruefung
+.vscode/                  VS-Code Build/Debug/Code-Quality-Konfiguration
+.clang-format             clang-format-Regeln fuer eigenen C/C++-Code
+.clang-tidy               clang-tidy-Regeln fuer statische Analyse
+cmake/                    Toolchain, Dependencies und Code-Quality-CMake-Ziele
 ThirdParty/               gepinnte Git-Submodule fuer XMCLib, CMSIS, FreeRTOS und RTT
 include/FreeRTOSConfig.h  FreeRTOS-Konfiguration fuer Cortex-M4F
 src/main.cpp              C++20 Einstieg, Task und RTT-Ausgabe

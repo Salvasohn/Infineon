@@ -2,6 +2,15 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.10
+
+- Projektweite `.clang-format`-Konfiguration fuer den eigenen C/C++-Code hinzugefuegt.
+- `.clang-tidy` mit Analyzer-, Bugprone-, Performance- und Portability-Checks hinzugefuegt.
+- CMake-Ziele `format`, `format-check` und `tidy` angelegt; `tidy` nutzt die Debug-Compile-Database und analysiert fuer `arm-none-eabi`.
+- VS-Code-Tasks fuer Formatieren, Format-Pruefung und clang-tidy ergaenzt.
+- GitHub Actions um einen separaten Code-Quality-Job mit clang-format 18 und clang-tidy 18 erweitert.
+- `ThirdParty/` bleibt von den projektweiten Format-/Tidy-Regeln ausgenommen.
+
 ## 00.00.09
 
 - CI auf die Arm GNU Toolchain `14.2.rel1` (GCC `14.2.1`) fest gepinnt, passend zur lokal verwendeten Toolchain.

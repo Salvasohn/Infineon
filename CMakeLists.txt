@@ -65,5 +65,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMENT "Generating HEX/BIN images"
 )
 
+include(cmake/CodeQuality.cmake)
+
 message(STATUS "Firmware version: ${FW_VERSION}")
 message(STATUS "Target: Infineon XMC4500E144x1024")

@@ -1,0 +1,21 @@
+---
+Checks: >
+  -*,
+  clang-analyzer-*,
+  bugprone-*,
+  performance-*,
+  portability-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-macro-parentheses,
+  -bugprone-reserved-identifier
+WarningsAsErrors: >
+  clang-analyzer-*,
+  bugprone-*,
+  performance-*,
+  portability-*
+HeaderFilterRegex: '.*[\\/](src|include)[\\/].*'
+SystemHeaders: false
+FormatStyle: file
+CheckOptions:
+  bugprone-assert-side-effect.AssertMacros: 'configASSERT'
+...

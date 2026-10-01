@@ -35,6 +35,30 @@
       "dependsOn": "CMake: configure release",
       "problemMatcher": ["$gcc"],
       "group": "build"
+    },
+    {
+      "label": "Code quality: format",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "debug", "--target", "format"],
+      "dependsOn": "CMake: configure debug",
+      "problemMatcher": []
+    },
+    {
+      "label": "Code quality: format check",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "debug", "--target", "format-check"],
+      "dependsOn": "CMake: configure debug",
+      "problemMatcher": []
+    },
+    {
+      "label": "Code quality: clang-tidy",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "debug", "--target", "tidy"],
+      "dependsOn": "CMake: configure debug",
+      "problemMatcher": ["$gcc"]
     }
   ]
 }
