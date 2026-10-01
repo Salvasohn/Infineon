@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.24)
+
+project(xmc4500_freertos_rtt LANGUAGES C CXX ASM)
+
+file(READ "${CMAKE_CURRENT_SOURCE_DIR}/VERSION" FW_VERSION)
+string(STRIP "${FW_VERSION}" FW_VERSION)
+
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+message(STATUS "Firmware version: ${FW_VERSION}")
+message(STATUS "Target: Infineon XMC4500E144 (1 MiB flash)")
