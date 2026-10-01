@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.08** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.09** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -14,7 +14,7 @@ Aktueller Entwicklungsstand: **00.00.08** auf Branch `develop`.
 
 ## Enthaltene Komponenten
 
-- Arm GNU Toolchain (`arm-none-eabi-gcc/g++/gdb`)
+- Arm GNU Toolchain (`arm-none-eabi-gcc/g++/gdb`), fuer CI auf `14.2.rel1` / GCC `14.2.1` gepinnt
 - CMake >= 3.24 und Ninja
 - Infineon XMCLib `release-v4.7.0` (Commit `c24888699c6c5cfd6e5475be90d9703e43540d04`)
 - Arm CMSIS `5.9.0` (Commit `2b7495b8535bdcb306dac29b9ded4cfb679d7e5c`) fuer die generischen Cortex-M4-Core-Header
@@ -91,15 +91,18 @@ xmc4500_freertos_rtt.map
 
 Der Workflow `.github/workflows/build.yml` laeuft bei jedem Push auf `develop`, bei Pull Requests gegen `develop` und manuell per `workflow_dispatch`.
 
+Die CI verwendet bewusst dieselbe Compiler-Version wie die lokale Referenzumgebung: **Arm GNU Toolchain 14.2.rel1 / GCC 14.2.1**. Das offizielle Linux-Archiv wird direkt von Arm geladen und vor dem Entpacken gegen den fest hinterlegten SHA-256-Wert `62a63b981fe391a9cbad7ef51b17e49aeaa3e7b0d029b36ca1e9c3b2a9b78823` geprueft.
+
 Die Pipeline:
 
 1. checkt das Repository inklusive aller Git-Submodule aus,
-2. installiert `gcc-arm-none-eabi`, newlib und Ninja auf einem GitHub-Ubuntu-Runner,
-3. konfiguriert Debug und Release jeweils mit `--fresh`,
-4. baut beide CMake-Presets,
-5. prueft, dass ELF/HEX/BIN/MAP vorhanden und nicht leer sind,
-6. fuehrt `arm-none-eabi-size` auf dem ELF aus,
-7. laedt die Firmware-Dateien fuer Debug und Release als GitHub-Actions-Artefakte hoch.
+2. installiert Ninja und die gepinnte Arm GNU Toolchain 14.2.rel1,
+3. prueft explizit, dass `arm-none-eabi-g++` Version `14.2.1` meldet,
+4. konfiguriert Debug und Release jeweils mit `--fresh`,
+5. baut beide CMake-Presets,
+6. prueft, dass ELF/HEX/BIN/MAP vorhanden und nicht leer sind,
+7. fuehrt `arm-none-eabi-size` auf dem ELF aus,
+8. laedt die Firmware-Dateien fuer Debug und Release als GitHub-Actions-Artefakte hoch.
 
 Damit kann ein Build ohne angeschlossene Hardware serverseitig verifiziert werden. Flashen, SWD und RTT bleiben Hardware-Tests und koennen nicht durch die CI ersetzt werden.
 
@@ -120,7 +123,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.08
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.09
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat

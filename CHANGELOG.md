@@ -2,6 +2,13 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.09
+
+- CI auf die Arm GNU Toolchain `14.2.rel1` (GCC `14.2.1`) fest gepinnt, passend zur lokal verwendeten Toolchain.
+- Offizielles Arm-Toolchain-Archiv wird in der CI per SHA-256 vor der Installation verifiziert.
+- GitHub Actions auf Node-24-faehige Versionen `actions/checkout@v5` und `actions/upload-artifact@v6` aktualisiert.
+- Debug- und Release-Build bleiben als getrennte CI-Jobs mit Artefaktpruefung erhalten.
+
 ## 00.00.08
 
 - Release-Build als VS-Code-Task auf Basis des vorhandenen CMake-Presets `release` ergaenzt.
