@@ -2,6 +2,12 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.11
+
+- clang-format-Regeln an den bestehenden Embedded-Stil angepasst (`ColumnLimit: 0`, einfache Fortsetzungs-Einrueckung, unveraenderte Include-Reihenfolge).
+- Bestehende mehrzeilige RTT-Aufrufe an die definierte Fortsetzungs-Einrueckung angepasst.
+- Die bewusst tabellarisch ausgerichtete FreeRTOS-Makrosektion mit `clang-format off/on` vor automatischer Umformatierung geschuetzt.
+
 ## 00.00.10
 
 - Projektweite `.clang-format`-Konfiguration fuer den eigenen C/C++-Code hinzugefuegt.

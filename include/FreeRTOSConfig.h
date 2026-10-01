@@ -12,6 +12,7 @@ void vAssertCalled(const char *file, int line);
 }
 #endif
 
+// clang-format off
 #define configUSE_PREEMPTION                     1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION  0
 #define configUSE_TICKLESS_IDLE                   0
@@ -61,3 +62,4 @@ void vAssertCalled(const char *file, int line);
 #define INCLUDE_vTaskDelete                       1
 
 #define configASSERT(x) do { if ((x) == 0) { vAssertCalled(__FILE__, __LINE__); } } while (0)
+// clang-format on

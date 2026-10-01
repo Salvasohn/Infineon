@@ -6,7 +6,8 @@ IndentWidth: 4
 ContinuationIndentWidth: 4
 TabWidth: 4
 UseTab: Never
-ColumnLimit: 100
+ColumnLimit: 0
+AlignAfterOpenBracket: DontAlign
 BreakBeforeBraces: Custom
 BraceWrapping:
   AfterClass: true
@@ -18,14 +19,14 @@ BraceWrapping:
   AfterUnion: true
   BeforeCatch: false
   BeforeElse: false
-  SplitEmptyFunction: false
+  SplitEmptyFunction: true
 AllowShortBlocksOnASingleLine: Never
 AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
 DerivePointerAlignment: false
 PointerAlignment: Right
-SortIncludes: CaseSensitive
+SortIncludes: Never
 IncludeBlocks: Preserve
 ReflowComments: true
 InsertNewlineAtEOF: true

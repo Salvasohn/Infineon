@@ -41,11 +41,11 @@ int main()
     SEGGER_RTT_Init();
 
     SEGGER_RTT_printf(0,
-                      "\r\n[boot] XMC4500E144 | FreeRTOS | C++20 | fw %s\r\n",
-                      FW_VERSION);
+        "\r\n[boot] XMC4500E144 | FreeRTOS | C++20 | fw %s\r\n",
+        FW_VERSION);
     SEGGER_RTT_printf(0,
-                      "[boot] SystemCoreClock=%lu Hz, RTT channel 0 ready\r\n",
-                      static_cast<unsigned long>(SystemCoreClock));
+        "[boot] SystemCoreClock=%lu Hz, RTT channel 0 ready\r\n",
+        static_cast<unsigned long>(SystemCoreClock));
 
     const BaseType_t created = xTaskCreate(
         heartbeat_task,
@@ -70,16 +70,16 @@ extern "C" void vApplicationMallocFailedHook(void)
 extern "C" void vApplicationStackOverflowHook(TaskHandle_t, char *task_name)
 {
     SEGGER_RTT_printf(0,
-                      "[fault] stack overflow: %s\r\n",
-                      task_name != nullptr ? task_name : "<unknown>");
+        "[fault] stack overflow: %s\r\n",
+        task_name != nullptr ? task_name : "<unknown>");
     halt_forever();
 }
 
 extern "C" void vAssertCalled(const char *file, int line)
 {
     SEGGER_RTT_printf(0,
-                      "[assert] %s:%d\r\n",
-                      file != nullptr ? file : "<unknown>",
-                      line);
+        "[assert] %s:%d\r\n",
+        file != nullptr ? file : "<unknown>",
+        line);
     halt_forever();
 }
