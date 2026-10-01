@@ -19,6 +19,22 @@
         "kind": "build",
         "isDefault": true
       }
+    },
+    {
+      "label": "CMake: configure release",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--preset", "release"],
+      "problemMatcher": []
+    },
+    {
+      "label": "CMake: build release",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "--preset", "release"],
+      "dependsOn": "CMake: configure release",
+      "problemMatcher": ["$gcc"],
+      "group": "build"
     }
   ]
 }

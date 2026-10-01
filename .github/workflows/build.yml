@@ -1,0 +1,71 @@
+name: Firmware build
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build ${{ matrix.preset }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        preset:
+          - debug
+          - release
+
+    steps:
+      - name: Check out repository and submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install Arm GNU toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes gcc-arm-none-eabi libnewlib-arm-none-eabi ninja-build
+          arm-none-eabi-g++ --version
+          cmake --version
+          ninja --version
+
+      - name: Configure ${{ matrix.preset }}
+        shell: bash
+        run: cmake --preset "${{ matrix.preset }}" --fresh
+
+      - name: Build ${{ matrix.preset }}
+        shell: bash
+        run: cmake --build --preset "${{ matrix.preset }}" --verbose
+
+      - name: Verify firmware artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          build_dir="build/${{ matrix.preset }}"
+          for extension in elf hex bin map; do
+            test -s "${build_dir}/xmc4500_freertos_rtt.${extension}"
+          done
+          arm-none-eabi-size "${build_dir}/xmc4500_freertos_rtt.elf"
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: xmc4500-${{ matrix.preset }}-${{ github.sha }}
+          path: |
+            build/${{ matrix.preset }}/xmc4500_freertos_rtt.elf
+            build/${{ matrix.preset }}/xmc4500_freertos_rtt.hex
+            build/${{ matrix.preset }}/xmc4500_freertos_rtt.bin
+            build/${{ matrix.preset }}/xmc4500_freertos_rtt.map
+          if-no-files-found: error
+          retention-days: 14

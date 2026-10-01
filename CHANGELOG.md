@@ -2,6 +2,13 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.08
+
+- Release-Build als VS-Code-Task auf Basis des vorhandenen CMake-Presets `release` ergaenzt.
+- GitHub-Actions-Pipeline fuer reproduzierbare Debug- und Release-Builds hinzugefuegt.
+- CI initialisiert alle Git-Submodule, installiert die Arm-GNU-Bare-Metal-Toolchain und baut beide Presets frisch.
+- CI prueft ELF/HEX/BIN/MAP und stellt die erzeugten Firmware-Dateien als Build-Artefakte bereit.
+
 ## 00.00.07
 
 - FreeRTOS-Option `INCLUDE_xTaskDelayUntil` aktiviert, damit `xTaskDelayUntil()` mitgebaut und gelinkt wird.

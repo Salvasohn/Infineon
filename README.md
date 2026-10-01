@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.07** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.08** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -53,7 +53,7 @@ git clone --recurse-submodules https://github.com/Salvasohn/Infineon.git
 
 CMake verwendet danach ausschliesslich die lokalen Quellen aus `ThirdParty/` und laedt beim Konfigurieren keine Bibliotheken per `FetchContent` nach.
 
-## Build
+## Debug-Build
 
 ```bash
 cmake --preset debug
@@ -67,7 +67,18 @@ cmake --preset debug --fresh
 cmake --build --preset debug
 ```
 
-Die Artefakte liegen danach in `build/debug/`:
+Die Debug-Artefakte liegen in `build/debug/`.
+
+## Release-Build
+
+```bash
+cmake --preset release --fresh
+cmake --build --preset release
+```
+
+Die Release-Artefakte liegen in `build/release/`. In VS Code stehen dafuer die Tasks `CMake: configure release` und `CMake: build release` zur Verfuegung.
+
+Beide Build-Varianten erzeugen:
 
 ```text
 xmc4500_freertos_rtt.elf
@@ -75,6 +86,22 @@ xmc4500_freertos_rtt.hex
 xmc4500_freertos_rtt.bin
 xmc4500_freertos_rtt.map
 ```
+
+## Continuous Integration
+
+Der Workflow `.github/workflows/build.yml` laeuft bei jedem Push auf `develop`, bei Pull Requests gegen `develop` und manuell per `workflow_dispatch`.
+
+Die Pipeline:
+
+1. checkt das Repository inklusive aller Git-Submodule aus,
+2. installiert `gcc-arm-none-eabi`, newlib und Ninja auf einem GitHub-Ubuntu-Runner,
+3. konfiguriert Debug und Release jeweils mit `--fresh`,
+4. baut beide CMake-Presets,
+5. prueft, dass ELF/HEX/BIN/MAP vorhanden und nicht leer sind,
+6. fuehrt `arm-none-eabi-size` auf dem ELF aus,
+7. laedt die Firmware-Dateien fuer Debug und Release als GitHub-Actions-Artefakte hoch.
+
+Damit kann ein Build ohne angeschlossene Hardware serverseitig verifiziert werden. Flashen, SWD und RTT bleiben Hardware-Tests und koennen nicht durch die CI ersetzt werden.
 
 ## Debuggen mit VS Code und J-Link Ultra+
 
@@ -93,7 +120,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.07
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.08
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat
@@ -106,7 +133,7 @@ Der konkrete `SystemCoreClock`-Wert wird zur Laufzeit ausgegeben. Die Heartbeat-
 ## Projektstruktur
 
 ```text
-.github/workflows/         automatische Versions-Tag-Pruefung
+.github/workflows/         CI-Build und automatische Versions-Tag-Pruefung
 .vscode/                  VS-Code Build/Debug-Konfiguration
 cmake/                    Toolchain und lokale Dependency-Einbindung
 ThirdParty/               gepinnte Git-Submodule fuer XMCLib, CMSIS, FreeRTOS und RTT
