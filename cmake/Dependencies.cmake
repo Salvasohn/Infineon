@@ -26,3 +26,19 @@ FetchContent_Declare(
   GIT_SHALLOW TRUE
 )
 FetchContent_MakeAvailable(freertos_kernel)
+
+FetchContent_Declare(
+  segger_rtt
+  GIT_REPOSITORY https://github.com/SEGGERMicro/RTT.git
+  GIT_TAG 4d8feab3150f86f37a9d323ddc88d6cdf5673072
+)
+FetchContent_MakeAvailable(segger_rtt)
+
+add_library(segger_rtt_port STATIC
+  ${segger_rtt_SOURCE_DIR}/RTT/SEGGER_RTT.c
+  ${segger_rtt_SOURCE_DIR}/RTT/SEGGER_RTT_printf.c
+)
+target_include_directories(segger_rtt_port PUBLIC
+  ${segger_rtt_SOURCE_DIR}/RTT
+  ${segger_rtt_SOURCE_DIR}/Config
+)

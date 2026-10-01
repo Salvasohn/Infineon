@@ -46,6 +46,7 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 target_link_libraries(${PROJECT_NAME} PRIVATE
   xmc4500_platform
   freertos_kernel
+  segger_rtt_port
 )
 target_link_options(${PROJECT_NAME} PRIVATE
   -nostartfiles

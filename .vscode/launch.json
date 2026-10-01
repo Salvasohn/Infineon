@@ -1,0 +1,30 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "XMC4500 - J-Link + RTT",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "jlink",
+      "cwd": "${workspaceFolder}",
+      "executable": "${workspaceFolder}/build/debug/xmc4500_freertos_rtt.elf",
+      "device": "XMC4500-1024",
+      "interface": "swd",
+      "rtos": "FreeRTOS",
+      "runToEntryPoint": "main",
+      "preLaunchTask": "CMake: build debug",
+      "serverArgs": ["-speed", "4000"],
+      "rttConfig": {
+        "enabled": true,
+        "address": "auto",
+        "decoders": [
+          {
+            "label": "RTT Console",
+            "port": 0,
+            "type": "console"
+          }
+        ]
+      }
+    }
+  ]
+}
