@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.06** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.07** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -60,6 +60,13 @@ cmake --preset debug
 cmake --build --preset debug
 ```
 
+Nach Aenderungen an Toolchain- oder globalen Compiler-Flags sollte der CMake-Cache einmal verworfen werden:
+
+```bash
+cmake --preset debug --fresh
+cmake --build --preset debug
+```
+
 Die Artefakte liegen danach in `build/debug/`:
 
 ```text
@@ -86,7 +93,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.06
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.07
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat
@@ -105,6 +112,7 @@ cmake/                    Toolchain und lokale Dependency-Einbindung
 ThirdParty/               gepinnte Git-Submodule fuer XMCLib, CMSIS, FreeRTOS und RTT
 include/FreeRTOSConfig.h  FreeRTOS-Konfiguration fuer Cortex-M4F
 src/main.cpp              C++20 Einstieg, Task und RTT-Ausgabe
+src/runtime_stubs.c       minimale newlib/CRT-Hooks fuer Bare-Metal
 CMakeLists.txt            Firmware-Build
 CMakePresets.json         Debug/Release Presets
 VERSION                   Firmware-Versionsstand

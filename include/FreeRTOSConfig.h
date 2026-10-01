@@ -55,6 +55,7 @@ void vAssertCalled(const char *file, int line);
 #define xPortSysTickHandler                       SysTick_Handler
 
 #define INCLUDE_vTaskDelay                        1
+#define INCLUDE_xTaskDelayUntil                   1
 #define INCLUDE_xTaskGetSchedulerState            1
 #define INCLUDE_uxTaskPriorityGet                 1
 #define INCLUDE_vTaskDelete                       1

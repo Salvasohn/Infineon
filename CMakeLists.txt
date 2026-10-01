@@ -29,6 +29,7 @@ target_compile_definitions(xmc4500_platform PUBLIC XMC4500_E144x1024)
 
 add_executable(${PROJECT_NAME}
   src/main.cpp
+  src/runtime_stubs.c
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES SUFFIX ".elf")
 target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_20)

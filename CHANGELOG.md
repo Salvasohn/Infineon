@@ -2,6 +2,13 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.07
+
+- FreeRTOS-Option `INCLUDE_xTaskDelayUntil` aktiviert, damit `xTaskDelayUntil()` mitgebaut und gelinkt wird.
+- Bare-Metal-Runtime-Stubs `_init` und `_fini` fuer die Kombination aus Infineon-Startup, newlib und `-nostartfiles` hinzugefuegt.
+- `runtime_stubs.c` in den Firmware-Build aufgenommen.
+- Hinweis auf frisches CMake-Konfigurieren nach Toolchain-/Flag-Aenderungen ergaenzt.
+
 ## 00.00.06
 
 - Arm CMSIS 5.9.0 als eigenes gepinntes Submodule `ThirdParty/CMSIS_5` hinzugefuegt.
