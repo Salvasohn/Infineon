@@ -1,0 +1,9 @@
+[submodule "ThirdParty/XMCLib"]
+	path = ThirdParty/XMCLib
+	url = https://github.com/Infineon/mtb-xmclib-cat3.git
+[submodule "ThirdParty/FreeRTOS-Kernel"]
+	path = ThirdParty/FreeRTOS-Kernel
+	url = https://github.com/FreeRTOS/FreeRTOS-Kernel.git
+[submodule "ThirdParty/SEGGER_RTT"]
+	path = ThirdParty/SEGGER_RTT
+	url = https://github.com/SEGGERMicro/RTT.git

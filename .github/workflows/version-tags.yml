@@ -1,0 +1,60 @@
+name: Version tags
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-version-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate history and create missing version tags
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch origin master:refs/remotes/origin/master --force
+          mapfile -t commits < <(git rev-list --reverse origin/master..HEAD)
+
+          if (( ${#commits[@]} == 0 )); then
+            echo "No develop commits found after master."
+            exit 0
+          fi
+
+          for commit in "${commits[@]}"; do
+            version="$(git show "${commit}:VERSION" | tr -d '\r\n')"
+
+            if [[ ! "${version}" =~ ^[0-9]{2}\.[0-9]{2}\.[0-9]{2}$ ]]; then
+              echo "Invalid VERSION '${version}' in commit ${commit}."
+              exit 1
+            fi
+
+            if git log -1 --format=%B "${commit}" | grep -Fq "${version}"; then
+              echo "Commit ${commit} contains version ${version} in its message. Versions belong in tags only."
+              exit 1
+            fi
+
+            if git rev-parse -q --verify "refs/tags/${version}" >/dev/null; then
+              tagged_commit="$(git rev-list -n 1 "${version}")"
+              if [[ "${tagged_commit}" != "${commit}" ]]; then
+                echo "Tag ${version} already points to ${tagged_commit}, expected ${commit}."
+                exit 1
+              fi
+              echo "Tag ${version} already correct."
+            else
+              git tag "${version}" "${commit}"
+              echo "Created tag ${version} -> ${commit}."
+            fi
+          done
+
+          git push origin --tags

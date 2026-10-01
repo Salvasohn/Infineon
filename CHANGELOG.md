@@ -2,6 +2,15 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.05
+
+- XMCLib, FreeRTOS-Kernel und SEGGER RTT als gepinnte Git-Submodule unter `ThirdParty/` eingebunden.
+- CMake von `FetchContent` auf die lokalen `ThirdParty`-Quellen umgestellt.
+- Cortex-Debug-SVD-Pfad auf die lokale XMCLib-Kopie angepasst.
+- Clone-/Submodule-Anleitung dokumentiert.
+- Versionskennungen rueckwirkend aus den Commit-Beschreibungen entfernt und als Git-Tags definiert.
+- GitHub-Workflow zur Pruefung und Erzeugung fehlender Versions-Tags hinzugefuegt.
+
 ## 00.00.04
 
 - Projektdokumentation und Build-/Debug-Anleitung ergaenzt.

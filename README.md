@@ -2,21 +2,22 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.04** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.05** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
 - `master` wird nicht automatisch veraendert und nur nach expliziter Anweisung aktualisiert.
 - Die Entwicklung erfolgt linear auf `develop`.
 - Jeder gespeicherte Stand erhaelt eine Versionsnummer im Format `xx.xx.xx` in der Datei `VERSION` und einen gleichnamigen Git-Tag. Die Commit-Beschreibung enthaelt keine Versionskennung.
-- Externe Quellen sind auf feste Versionen bzw. Commits gepinnt.
+- Der Workflow `.github/workflows/version-tags.yml` prueft die lineare `develop`-Historie und erzeugt fehlende Versions-Tags aus den jeweiligen `VERSION`-Dateien.
+- Externe Quellen sind auf feste Versionen bzw. Commits gepinnt und als Git-Submodule unter `ThirdParty/` eingebunden.
 
 ## Enthaltene Komponenten
 
 - Arm GNU Toolchain (`arm-none-eabi-gcc/g++/gdb`)
 - CMake >= 3.24 und Ninja
 - Infineon XMCLib/CMSIS `release-v4.7.0` (Commit `c24888699c6c5cfd6e5475be90d9703e43540d04`)
-- FreeRTOS Kernel `V11.2.0`, Port `GCC_ARM_CM4F`, Heap `heap_4`
+- FreeRTOS Kernel `V11.2.0` (Commit `0adc196d4bd52a2d91102b525b0aafc1e14a2386`), Port `GCC_ARM_CM4F`, Heap `heap_4`
 - SEGGER RTT, gepinnt auf Commit `4d8feab3150f86f37a9d323ddc88d6cdf5673072`
 - VS Code mit CMake Tools, Cortex-Debug und C/C++
 
@@ -27,6 +28,7 @@ Die Infineon-Abhaengigkeit liefert das originale Startup-File `startup_XMC4500.S
 Folgende Programme muessen im `PATH` liegen:
 
 ```text
+git
 arm-none-eabi-gcc
 arm-none-eabi-g++
 arm-none-eabi-gdb
@@ -36,7 +38,19 @@ ninja
 
 Zusaetzlich muss das aktuelle **SEGGER J-Link Software and Documentation Pack** installiert sein. Der J-Link Ultra+ wird per SWD mit dem Target verbunden; das Target muss separat bzw. passend zur Hardware versorgt sein.
 
-Beim ersten CMake-Konfigurieren werden XMCLib, FreeRTOS und SEGGER RTT von ihren Git-Repositories geladen.
+Die externen Quellen liegen als Git-Submodule unter `ThirdParty/`. Nach einem normalen Clone oder nach dem Wechsel auf diesen Stand einmal ausfuehren:
+
+```bash
+git submodule update --init --recursive
+```
+
+Alternativ direkt inklusive Submodule klonen:
+
+```bash
+git clone --recurse-submodules https://github.com/Salvasohn/Infineon.git
+```
+
+CMake verwendet danach ausschliesslich die lokalen Quellen aus `ThirdParty/` und laedt beim Konfigurieren keine Bibliotheken per `FetchContent` nach.
 
 ## Build
 
@@ -56,12 +70,13 @@ xmc4500_freertos_rtt.map
 
 ## Debuggen mit VS Code und J-Link Ultra+
 
-1. Repository in VS Code oeffnen.
-2. Empfohlene Extensions installieren.
-3. J-Link Ultra+ per USB verbinden und SWD/Reset/GND mit dem XMC4500-Target verbinden.
-4. In **Run and Debug** die Konfiguration `XMC4500 - J-Link + RTT` auswaehlen.
-5. `F5` starten. Der Pre-Launch-Task konfiguriert und baut den Debug-Stand automatisch.
-6. Cortex-Debug startet den J-Link GDB Server fuer `XMC4500-1024`, programmiert das ELF und oeffnet RTT Kanal 0 im VS-Code-Terminal.
+1. Repository inklusive Submodule vorbereiten (`git submodule update --init --recursive`).
+2. Repository in VS Code oeffnen.
+3. Empfohlene Extensions installieren.
+4. J-Link Ultra+ per USB verbinden und SWD/Reset/GND mit dem XMC4500-Target verbinden.
+5. In **Run and Debug** die Konfiguration `XMC4500 - J-Link + RTT` auswaehlen.
+6. `F5` starten. Der Pre-Launch-Task konfiguriert und baut den Debug-Stand automatisch.
+7. Cortex-Debug startet den J-Link GDB Server fuer `XMC4500-1024`, programmiert das ELF und oeffnet RTT Kanal 0 im VS-Code-Terminal.
 
 Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverbindung noch nicht stabil ist, kann der Wert in `.vscode/launch.json` reduziert werden.
 
@@ -70,7 +85,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.04
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.05
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat
@@ -83,8 +98,10 @@ Der konkrete `SystemCoreClock`-Wert wird zur Laufzeit ausgegeben. Die Heartbeat-
 ## Projektstruktur
 
 ```text
+.github/workflows/         automatische Versions-Tag-Pruefung
 .vscode/                  VS-Code Build/Debug-Konfiguration
-cmake/                    Toolchain und gepinnte Abhaengigkeiten
+cmake/                    Toolchain und lokale Dependency-Einbindung
+ThirdParty/               gepinnte Git-Submodule fuer XMCLib, FreeRTOS und RTT
 include/FreeRTOSConfig.h  FreeRTOS-Konfiguration fuer Cortex-M4F
 src/main.cpp              C++20 Einstieg, Task und RTT-Ausgabe
 CMakeLists.txt            Firmware-Build
@@ -92,6 +109,8 @@ CMakePresets.json         Debug/Release Presets
 VERSION                   Firmware-Versionsstand
 CHANGELOG.md              lineare Versionshistorie
 ```
+
+Weitere Details zu den externen Revisionen stehen in `ThirdParty/README.md`.
 
 ## Hinweise zum ersten Hardware-Test
 
