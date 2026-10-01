@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.12** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.13** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -105,7 +105,7 @@ cmake --build --preset debug --target format-check
 cmake --build --preset debug --target tidy
 ```
 
-`format` schreibt die clang-format-Aenderungen in die Quelldateien. `format-check` prueft nur und liefert bei Abweichungen einen Fehler. `tidy` verwendet `build/debug/compile_commands.json`, erkennt den Pfad von `arm-none-eabi-g++` und uebergibt dessen Toolchain-Root zusammen mit `--target=arm-none-eabi` an clang-tidy. Damit wird der Code als Cortex-M-Bare-Metal-Code und nicht als Host-Anwendung analysiert.
+`format` schreibt die clang-format-Aenderungen in die Quelldateien. `format-check` prueft nur und liefert bei Abweichungen einen Fehler. `tidy` verwendet `build/debug/compile_commands.json`, erkennt den Pfad von `arm-none-eabi-g++` und uebergibt `--target=arm-none-eabi`, den Arm-GNU-Toolchain-Root sowie den newlib-Sysroot `<toolchain>/arm-none-eabi` an clang-tidy. Damit werden sowohl die Cortex-M-Bare-Metal-Zielarchitektur als auch die C-Standardheader derselben Arm-GNU-Toolchain verwendet.
 
 In VS Code stehen dieselben Funktionen als Tasks `Code quality: format`, `Code quality: format check` und `Code quality: clang-tidy` zur Verfuegung.
 
@@ -143,7 +143,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.12
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.13
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat

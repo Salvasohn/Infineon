@@ -33,12 +33,14 @@ find_program(ARM_NONE_EABI_GXX_EXECUTABLE NAMES arm-none-eabi-g++)
 if(CLANG_TIDY_EXECUTABLE AND ARM_NONE_EABI_GXX_EXECUTABLE)
   get_filename_component(ARM_GNU_BIN_DIR "${ARM_NONE_EABI_GXX_EXECUTABLE}" DIRECTORY)
   get_filename_component(ARM_GNU_TOOLCHAIN_ROOT "${ARM_GNU_BIN_DIR}" DIRECTORY)
+  set(ARM_GNU_SYSROOT "${ARM_GNU_TOOLCHAIN_ROOT}/arm-none-eabi")
 
   add_custom_target(tidy
     COMMAND "${CLANG_TIDY_EXECUTABLE}"
       -p "${CMAKE_BINARY_DIR}"
       "--extra-arg-before=--target=arm-none-eabi"
       "--extra-arg-before=--gcc-toolchain=${ARM_GNU_TOOLCHAIN_ROOT}"
+      "--extra-arg-before=--sysroot=${ARM_GNU_SYSROOT}"
       ${PROJECT_TIDY_SOURCES}
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     COMMENT "Running clang-tidy against the ARM compile database"

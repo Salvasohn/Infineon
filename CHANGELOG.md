@@ -2,6 +2,11 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.13
+
+- clang-tidy um den expliziten newlib-Sysroot der Arm GNU Toolchain erweitert.
+- `--sysroot=<toolchain>/arm-none-eabi` wird zusammen mit `--target=arm-none-eabi` und `--gcc-toolchain` verwendet, damit C-Standardheader aus der gepinnten Bare-Metal-Toolchain korrekt aufgeloest werden.
+
 ## 00.00.12
 
 - Unbenutztes `<cstdint>` aus `main.cpp` entfernt, damit clang-tidy fuer das ARM-Bare-Metal-Target keine unnoetigen C++-Standardbibliothek-Header aufloesen muss.
