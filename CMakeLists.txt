@@ -21,7 +21,7 @@ add_library(xmc4500_platform OBJECT
   ${XMC4500_DEVICE_DIR}/Source/TOOLCHAIN_GCC_ARM/startup_XMC4500.S
 )
 target_include_directories(xmc4500_platform PUBLIC
-  ${xmclib_SOURCE_DIR}/CMSIS/Core/Include
+  ${cmsis_core_SOURCE_DIR}/CMSIS/Core/Include
   ${XMC4500_DEVICE_DIR}/Include
   ${xmclib_SOURCE_DIR}/XMCLib/inc
 )

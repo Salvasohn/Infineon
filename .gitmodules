@@ -7,3 +7,6 @@
 [submodule "ThirdParty/SEGGER_RTT"]
 	path = ThirdParty/SEGGER_RTT
 	url = https://github.com/SEGGERMicro/RTT.git
+[submodule "ThirdParty/CMSIS_5"]
+	path = ThirdParty/CMSIS_5
+	url = https://github.com/ARM-software/CMSIS_5.git

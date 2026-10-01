@@ -2,6 +2,13 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.06
+
+- Arm CMSIS 5.9.0 als eigenes gepinntes Submodule `ThirdParty/CMSIS_5` hinzugefuegt.
+- Fehlenden Cortex-M4-Core-Header `core_cm4.h` durch den korrekten CMSIS-Core-Include-Pfad bereitgestellt.
+- CMake-Include-Pfade fuer Plattform und FreeRTOS von der nicht existierenden XMCLib-Core-Struktur auf `ThirdParty/CMSIS_5/CMSIS/Core/Include` umgestellt.
+- ThirdParty-Pruefung und Dokumentation erweitert.
+
 ## 00.00.05
 
 - XMCLib, FreeRTOS-Kernel und SEGGER RTT als gepinnte Git-Submodule unter `ThirdParty/` eingebunden.

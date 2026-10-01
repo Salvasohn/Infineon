@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.05** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.06** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -16,12 +16,13 @@ Aktueller Entwicklungsstand: **00.00.05** auf Branch `develop`.
 
 - Arm GNU Toolchain (`arm-none-eabi-gcc/g++/gdb`)
 - CMake >= 3.24 und Ninja
-- Infineon XMCLib/CMSIS `release-v4.7.0` (Commit `c24888699c6c5cfd6e5475be90d9703e43540d04`)
+- Infineon XMCLib `release-v4.7.0` (Commit `c24888699c6c5cfd6e5475be90d9703e43540d04`)
+- Arm CMSIS `5.9.0` (Commit `2b7495b8535bdcb306dac29b9ded4cfb679d7e5c`) fuer die generischen Cortex-M4-Core-Header
 - FreeRTOS Kernel `V11.2.0` (Commit `0adc196d4bd52a2d91102b525b0aafc1e14a2386`), Port `GCC_ARM_CM4F`, Heap `heap_4`
 - SEGGER RTT, gepinnt auf Commit `4d8feab3150f86f37a9d323ddc88d6cdf5673072`
 - VS Code mit CMake Tools, Cortex-Debug und C/C++
 
-Die Infineon-Abhaengigkeit liefert das originale Startup-File `startup_XMC4500.S`, das Linkerscript `XMC4500x1024.ld` und die XMC4500-SVD-Datei. Die Firmware wird fuer `XMC4500_E144x1024` kompiliert.
+XMCLib liefert die Infineon-spezifischen XMC4500 Device-Dateien, das Startup-File `startup_XMC4500.S`, das Linkerscript `XMC4500x1024.ld` und die XMC4500-SVD-Datei. Arm CMSIS liefert unter anderem `core_cm4.h`. Die Firmware wird fuer `XMC4500_E144x1024` kompiliert.
 
 ## Voraussetzungen
 
@@ -85,7 +86,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.05
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.06
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat
@@ -101,7 +102,7 @@ Der konkrete `SystemCoreClock`-Wert wird zur Laufzeit ausgegeben. Die Heartbeat-
 .github/workflows/         automatische Versions-Tag-Pruefung
 .vscode/                  VS-Code Build/Debug-Konfiguration
 cmake/                    Toolchain und lokale Dependency-Einbindung
-ThirdParty/               gepinnte Git-Submodule fuer XMCLib, FreeRTOS und RTT
+ThirdParty/               gepinnte Git-Submodule fuer XMCLib, CMSIS, FreeRTOS und RTT
 include/FreeRTOSConfig.h  FreeRTOS-Konfiguration fuer Cortex-M4F
 src/main.cpp              C++20 Einstieg, Task und RTT-Ausgabe
 CMakeLists.txt            Firmware-Build

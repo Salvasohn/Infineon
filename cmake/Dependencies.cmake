@@ -4,10 +4,12 @@ set(THIRDPARTY_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ThirdParty")
 set(xmclib_SOURCE_DIR "${THIRDPARTY_DIR}/XMCLib")
 set(freertos_kernel_SOURCE_DIR "${THIRDPARTY_DIR}/FreeRTOS-Kernel")
 set(segger_rtt_SOURCE_DIR "${THIRDPARTY_DIR}/SEGGER_RTT")
+set(cmsis_core_SOURCE_DIR "${THIRDPARTY_DIR}/CMSIS_5")
 
 if(NOT EXISTS "${xmclib_SOURCE_DIR}/CMSIS/Infineon/COMPONENT_XMC4500/Include/XMC4500.h"
    OR NOT EXISTS "${freertos_kernel_SOURCE_DIR}/CMakeLists.txt"
-   OR NOT EXISTS "${segger_rtt_SOURCE_DIR}/RTT/SEGGER_RTT.c")
+   OR NOT EXISTS "${segger_rtt_SOURCE_DIR}/RTT/SEGGER_RTT.c"
+   OR NOT EXISTS "${cmsis_core_SOURCE_DIR}/CMSIS/Core/Include/core_cm4.h")
   message(FATAL_ERROR
     "ThirdParty submodules are not initialized. Run: git submodule update --init --recursive")
 endif()
@@ -15,7 +17,7 @@ endif()
 add_library(freertos_config INTERFACE)
 target_include_directories(freertos_config SYSTEM INTERFACE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${xmclib_SOURCE_DIR}/CMSIS/Core/Include
+  ${cmsis_core_SOURCE_DIR}/CMSIS/Core/Include
   ${xmclib_SOURCE_DIR}/CMSIS/Infineon/COMPONENT_XMC4500/Include
 )
 target_compile_definitions(freertos_config INTERFACE XMC4500_E144x1024)

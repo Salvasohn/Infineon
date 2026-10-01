@@ -5,8 +5,11 @@ Die fuer den Firmware-Build benoetigten externen Quellen werden als Git-Submodul
 ## Gepinnte Revisionen
 
 - `XMCLib`: Infineon `mtb-xmclib-cat3`, `release-v4.7.0`, Commit `c24888699c6c5cfd6e5475be90d9703e43540d04`
+- `CMSIS_5`: Arm CMSIS `5.9.0`, Commit `2b7495b8535bdcb306dac29b9ded4cfb679d7e5c`
 - `FreeRTOS-Kernel`: `V11.2.0`, Commit `0adc196d4bd52a2d91102b525b0aafc1e14a2386`
 - `SEGGER_RTT`: Commit `4d8feab3150f86f37a9d323ddc88d6cdf5673072`
+
+`CMSIS_5` liefert die generischen Cortex-M4-Core-Header wie `core_cm4.h`; XMCLib liefert die Infineon-spezifischen XMC4500 Device-, Startup-, Linker- und SVD-Dateien.
 
 Nach einem normalen Clone oder nach dem Wechsel auf einen Stand mit neuen Submodulen:
 
