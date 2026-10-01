@@ -1,5 +1,3 @@
-#include <cstdint>
-
 extern "C" {
 #include "FreeRTOS.h"
 #include "SEGGER_RTT.h"

@@ -2,6 +2,12 @@
 
 Die Versionsnummer liegt in `VERSION`. Jeder gespeicherte Entwicklungsstand erhoeht die Nummer im Format `xx.xx.xx`, traegt einen gleichnamigen Git-Tag und bleibt Teil einer linearen Historie auf `develop`. Die Commit-Beschreibung enthaelt keine Versionskennung.
 
+## 00.00.12
+
+- Unbenutztes `<cstdint>` aus `main.cpp` entfernt, damit clang-tidy fuer das ARM-Bare-Metal-Target keine unnoetigen C++-Standardbibliothek-Header aufloesen muss.
+- `performance-enum-size` gezielt deaktiviert, da der Check ausschliesslich gepinnte FreeRTOS-Enums in `ThirdParty/` beanstandet und dort keine ABI-Aenderungen erzwungen werden sollen.
+- clang-format bleibt als harter First-Party-Formatcheck aktiv; clang-tidy bleibt auf Analyzer-, Bugprone-, Performance- und Portability-Pruefungen fuer den eigenen Code ausgerichtet.
+
 ## 00.00.11
 
 - clang-format-Regeln an den bestehenden Embedded-Stil angepasst (`ColumnLimit: 0`, einfache Fortsetzungs-Einrueckung, unveraenderte Include-Reihenfolge).

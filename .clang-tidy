@@ -7,7 +7,8 @@ Checks: >
   portability-*,
   -bugprone-easily-swappable-parameters,
   -bugprone-macro-parentheses,
-  -bugprone-reserved-identifier
+  -bugprone-reserved-identifier,
+  -performance-enum-size
 WarningsAsErrors: >
   clang-analyzer-*,
   bugprone-*,

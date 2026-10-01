@@ -2,7 +2,7 @@
 
 Initiales VS-Code-Projekt fuer einen **Infineon XMC4500E144x1024** (Cortex-M4F, 1 MiB Flash) mit **C++20**, **FreeRTOS** und **SEGGER RTT** als erster Debug-Ausgabe ueber einen J-Link Ultra+.
 
-Aktueller Entwicklungsstand: **00.00.11** auf Branch `develop`.
+Aktueller Entwicklungsstand: **00.00.12** auf Branch `develop`.
 
 ## Branch- und Versionsregel
 
@@ -94,6 +94,8 @@ xmc4500_freertos_rtt.map
 
 Die Stilregeln liegen in `.clang-format`, die statischen Analyse-Regeln in `.clang-tidy`. Geprueft wird eigener Code unter `src/` und `include/`; gepinnte Fremdquellen unter `ThirdParty/` werden nicht umformatiert oder als Projektcode bewertet. Die tabellarisch ausgerichtete FreeRTOS-Makrosektion in `FreeRTOSConfig.h` ist bewusst mit `clang-format off/on` von automatischer Umformatierung ausgenommen.
 
+Der Check `performance-enum-size` ist bewusst deaktiviert: Er beanstandet die Enum-Repräsentation in den gepinnten FreeRTOS-Headern. Eine Aenderung daran wuerde Third-Party-ABI und Upstream-Code betreffen und ist deshalb kein sinnvoller First-Party-Qualitaetscheck fuer dieses Projekt.
+
 Nach einem Debug-Configure stehen folgende CMake-Ziele zur Verfuegung:
 
 ```bash
@@ -141,7 +143,7 @@ Die J-Link-Geschwindigkeit ist initial auf 4 MHz gesetzt. Falls die Hardwareverb
 Direkt nach dem Start sollte sinngemaess folgende Ausgabe erscheinen:
 
 ```text
-[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.11
+[boot] XMC4500E144 | FreeRTOS | C++20 | fw 00.00.12
 [boot] SystemCoreClock=120000000 Hz, RTT channel 0 ready
 [tick 0 ms] FreeRTOS heartbeat
 [tick 1000 ms] FreeRTOS heartbeat
